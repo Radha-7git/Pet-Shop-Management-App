@@ -1,0 +1,24 @@
+# Maven build outputs
+/target/
+
+# IDE/editor
+/.idea/
+*.iml
+/.classpath
+/.project
+/.settings/
+/.vscode/
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Logs and temp
+*.log
+/tmp/
+
+# Upgrade tool artifacts
+/.github/java-upgrade/
+
+# Compiled classes
+*.class
