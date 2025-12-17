@@ -1,5 +1,6 @@
 package com.example.petshop.config;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -13,6 +14,10 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
+                // Allow static resources and the root welcome page
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                .requestMatchers("/", "/index.html").permitAll()
+                // Allow public endpoints
                 .requestMatchers("/actuator/**", "/h2-console/**", "/api/**").permitAll()
                 .anyRequest().authenticated()
             )
