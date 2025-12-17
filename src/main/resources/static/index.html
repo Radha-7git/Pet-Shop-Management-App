@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pet Shop (Simple)</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 900px;
+        margin: 2rem auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+      th {
+        background: #f7f7f7;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr auto;
+        gap: 0.5rem;
+      }
+      .error {
+        color: #b00;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Pet Shop</h1>
+    <div id="error" class="error"></div>
+
+    <section>
+      <h2>Add Pet</h2>
+      <form id="form" class="grid">
+        <input name="name" placeholder="Name" required />
+        <input name="species" placeholder="Species" required />
+        <input
+          name="price"
+          type="number"
+          min="0"
+          step="0.01"
+          placeholder="Price"
+        />
+        <button type="submit">Add</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Pets</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Species</th>
+            <th>Status</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </section>
+
+    <script>
+      const rows = document.getElementById("rows");
+      const form = document.getElementById("form");
+      const errorBox = document.getElementById("error");
+
+      async function loadPets() {
+        errorBox.textContent = "";
+        try {
+          const res = await fetch("/api/pets");
+          if (!res.ok) throw new Error("Failed to load pets");
+          const data = await res.json();
+          rows.innerHTML = data
+            .map(
+              (p) => `
+          <tr>
+            <td>${p.id ?? ""}</td>
+            <td>${p.name ?? ""}</td>
+            <td>${p.species ?? ""}</td>
+            <td>${p.status ?? ""}</td>
+            <td>${p.price ?? ""}</td>
+          </tr>
+        `
+            )
+            .join("");
+        } catch (e) {
+          errorBox.textContent = e.message;
+        }
+      }
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        errorBox.textContent = "";
+        const fd = new FormData(form);
+        const payload = {
+          name: fd.get("name"),
+          species: fd.get("species"),
+          price: fd.get("price") ? Number(fd.get("price")) : 0,
+        };
+        try {
+          const res = await fetch("/api/pets", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          if (!res.ok) throw new Error("Failed to create pet");
+          form.reset();
+          await loadPets();
+        } catch (e) {
+          errorBox.textContent = e.message;
+        }
+      });
+
+      loadPets();
+    </script>
+  </body>
+</html>
