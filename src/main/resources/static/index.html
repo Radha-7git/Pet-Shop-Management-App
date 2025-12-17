@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Pet Shop Management</title>
     <style>
-      * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+      }
       body {
         font-family: system-ui, -apple-system, sans-serif;
         margin: 0;
         padding: 0;
         background: #f5f5f5;
+        color: #222; /* Improve base text contrast */
       }
       .container {
         max-width: 1200px;
@@ -35,9 +38,11 @@
         cursor: pointer;
         font-size: 16px;
         transition: all 0.3s;
+        color: #24292f; /* Ensure tab text is visible on white */
       }
       .tab:hover {
         background: #f8f8f8;
+        color: #111; /* Slightly darker on hover for readability */
       }
       .tab.active {
         border-bottom-color: #007bff;
@@ -49,7 +54,7 @@
         background: #fff;
         padding: 24px;
         border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       }
       .tab-content.active {
         display: block;
@@ -60,7 +65,9 @@
         gap: 12px;
         margin-bottom: 16px;
       }
-      input, select, button {
+      input,
+      select,
+      button {
         padding: 10px;
         border: 1px solid #ddd;
         border-radius: 4px;
@@ -89,7 +96,8 @@
         border-collapse: collapse;
         margin-top: 20px;
       }
-      th, td {
+      th,
+      td {
         padding: 12px;
         text-align: left;
         border-bottom: 1px solid #eee;
@@ -127,7 +135,7 @@
   <body>
     <div class="container">
       <h1>🐾 Pet Shop Management System</h1>
-      
+
       <div class="tabs">
         <button class="tab active" onclick="switchTab('pets')">Pets</button>
         <button class="tab" onclick="switchTab('customers')">Customers</button>
@@ -139,20 +147,26 @@
       <div id="pets" class="tab-content active">
         <h2>Manage Pets</h2>
         <div id="pets-message" class="message"></div>
-        
+
         <form id="pet-form" class="form-grid">
           <input name="name" placeholder="Pet Name" required />
           <input name="species" placeholder="Species" required />
           <input name="breed" placeholder="Breed" />
           <input name="age" type="number" placeholder="Age" min="0" />
-          <input name="price" type="number" step="0.01" placeholder="Price" required />
+          <input
+            name="price"
+            type="number"
+            step="0.01"
+            placeholder="Price"
+            required
+          />
           <select name="status">
             <option value="AVAILABLE">Available</option>
             <option value="SOLD">Sold</option>
           </select>
           <button type="submit">Add Pet</button>
         </form>
-        
+
         <table>
           <thead>
             <tr>
@@ -174,14 +188,14 @@
       <div id="customers" class="tab-content">
         <h2>Manage Customers</h2>
         <div id="customers-message" class="message"></div>
-        
+
         <form id="customer-form" class="form-grid">
           <input name="fullName" placeholder="Full Name" required />
           <input name="phone" placeholder="Phone" required />
           <input name="email" type="email" placeholder="Email" required />
           <button type="submit">Add Customer</button>
         </form>
-        
+
         <table>
           <thead>
             <tr>
@@ -200,17 +214,23 @@
       <div id="sales" class="tab-content">
         <h2>Manage Sales</h2>
         <div id="sales-message" class="message"></div>
-        
+
         <form id="sale-form" class="form-grid">
           <select name="customerId" id="sale-customer" required>
             <option value="">Select Customer</option>
           </select>
-          <select name="petIds" id="sale-pets" multiple required style="grid-column: span 2;">
+          <select
+            name="petIds"
+            id="sale-pets"
+            multiple
+            required
+            style="grid-column: span 2"
+          >
             <option value="">Select Pets (hold Ctrl to select multiple)</option>
           </select>
           <button type="submit">Create Sale</button>
         </form>
-        
+
         <table>
           <thead>
             <tr>
@@ -230,10 +250,15 @@
       <div id="users" class="tab-content">
         <h2>Manage Users</h2>
         <div id="users-message" class="message"></div>
-        
+
         <form id="user-form" class="form-grid">
           <input name="email" type="email" placeholder="Email" required />
-          <input name="password" type="password" placeholder="Password" required />
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            required
+          />
           <select name="role" required>
             <option value="">Select Role</option>
             <option value="ADMIN">Admin</option>
@@ -242,7 +267,7 @@
           </select>
           <button type="submit">Add User</button>
         </form>
-        
+
         <table>
           <thead>
             <tr>
@@ -260,85 +285,101 @@
     <script>
       // Tab switching
       function switchTab(tabName) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        event.target.classList.add('active');
-        document.getElementById(tabName).classList.add('active');
-        
-        if (tabName === 'pets') loadPets();
-        else if (tabName === 'customers') loadCustomers();
-        else if (tabName === 'sales') { loadSales(); loadSaleOptions(); }
-        else if (tabName === 'users') loadUsers();
+        document
+          .querySelectorAll(".tab")
+          .forEach((t) => t.classList.remove("active"));
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((c) => c.classList.remove("active"));
+        event.target.classList.add("active");
+        document.getElementById(tabName).classList.add("active");
+
+        if (tabName === "pets") loadPets();
+        else if (tabName === "customers") loadCustomers();
+        else if (tabName === "sales") {
+          loadSales();
+          loadSaleOptions();
+        } else if (tabName === "users") loadUsers();
       }
 
       // Show message helper
       function showMessage(section, message, isError = false) {
         const el = document.getElementById(`${section}-message`);
         el.textContent = message;
-        el.className = isError ? 'message error show' : 'message success show';
-        setTimeout(() => el.classList.remove('show'), 4000);
+        el.className = isError ? "message error show" : "message success show";
+        setTimeout(() => el.classList.remove("show"), 4000);
       }
 
       // ========== PETS ==========
       async function loadPets() {
         try {
-          const res = await fetch('/api/pets');
-          if (!res.ok) throw new Error('Failed to load pets');
+          const res = await fetch("/api/pets");
+          if (!res.ok) throw new Error("Failed to load pets");
           const data = await res.json();
-          document.getElementById('pets-table').innerHTML = data.map(p => `
+          document.getElementById("pets-table").innerHTML = data
+            .map(
+              (p) => `
             <tr>
               <td>${p.id}</td>
               <td>${p.name}</td>
               <td>${p.species}</td>
-              <td>${p.breed || '-'}</td>
-              <td>${p.age || '-'}</td>
+              <td>${p.breed || "-"}</td>
+              <td>${p.age || "-"}</td>
               <td>$${p.price}</td>
               <td>${p.status}</td>
-              <td><button class="btn-delete" onclick="deletePet(${p.id})">Delete</button></td>
+              <td><button class="btn-delete" onclick="deletePet(${
+                p.id
+              })">Delete</button></td>
             </tr>
-          `).join('');
+          `
+            )
+            .join("");
         } catch (e) {
-          showMessage('pets', e.message, true);
+          showMessage("pets", e.message, true);
         }
       }
 
-      document.getElementById('pet-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const data = Object.fromEntries(new FormData(e.target));
-        try {
-          const res = await fetch('/api/pets', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-          });
-          if (!res.ok) throw new Error('Failed to add pet');
-          showMessage('pets', 'Pet added successfully!');
-          e.target.reset();
-          loadPets();
-        } catch (e) {
-          showMessage('pets', e.message, true);
-        }
-      });
+      document
+        .getElementById("pet-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const data = Object.fromEntries(new FormData(e.target));
+          try {
+            const res = await fetch("/api/pets", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data),
+            });
+            if (!res.ok) throw new Error("Failed to add pet");
+            showMessage("pets", "Pet added successfully!");
+            e.target.reset();
+            loadPets();
+          } catch (e) {
+            showMessage("pets", e.message, true);
+          }
+        });
 
       async function deletePet(id) {
-        if (!confirm('Delete this pet?')) return;
+        if (!confirm("Delete this pet?")) return;
         try {
-          const res = await fetch(`/api/pets/${id}`, { method: 'DELETE' });
-          if (!res.ok) throw new Error('Failed to delete pet');
-          showMessage('pets', 'Pet deleted successfully!');
+          const res = await fetch(`/api/pets/${id}`, { method: "DELETE" });
+          if (!res.ok) throw new Error("Failed to delete pet");
+          showMessage("pets", "Pet deleted successfully!");
           loadPets();
         } catch (e) {
-          showMessage('pets', e.message, true);
+          showMessage("pets", e.message, true);
         }
       }
 
       // ========== CUSTOMERS ==========
       async function loadCustomers() {
         try {
-          const res = await fetch('/api/customers');
-          if (!res.ok) throw new Error('Failed to load customers');
+          const res = await fetch("/api/customers");
+          if (!res.ok) throw new Error("Failed to load customers");
           const data = await res.json();
-          document.getElementById('customers-table').innerHTML = data.map(c => `
+          document.getElementById("customers-table").innerHTML = data
+            .map(
+              (c) => `
             <tr>
               <td>${c.id}</td>
               <td>${c.fullName}</td>
@@ -346,39 +387,43 @@
               <td>${c.email}</td>
               <td><button class="btn-delete" onclick="deleteCustomer(${c.id})">Delete</button></td>
             </tr>
-          `).join('');
+          `
+            )
+            .join("");
         } catch (e) {
-          showMessage('customers', e.message, true);
+          showMessage("customers", e.message, true);
         }
       }
 
-      document.getElementById('customer-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const data = Object.fromEntries(new FormData(e.target));
-        try {
-          const res = await fetch('/api/customers', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-          });
-          if (!res.ok) throw new Error('Failed to add customer');
-          showMessage('customers', 'Customer added successfully!');
-          e.target.reset();
-          loadCustomers();
-        } catch (e) {
-          showMessage('customers', e.message, true);
-        }
-      });
+      document
+        .getElementById("customer-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const data = Object.fromEntries(new FormData(e.target));
+          try {
+            const res = await fetch("/api/customers", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data),
+            });
+            if (!res.ok) throw new Error("Failed to add customer");
+            showMessage("customers", "Customer added successfully!");
+            e.target.reset();
+            loadCustomers();
+          } catch (e) {
+            showMessage("customers", e.message, true);
+          }
+        });
 
       async function deleteCustomer(id) {
-        if (!confirm('Delete this customer?')) return;
+        if (!confirm("Delete this customer?")) return;
         try {
-          const res = await fetch(`/api/customers/${id}`, { method: 'DELETE' });
-          if (!res.ok) throw new Error('Failed to delete customer');
-          showMessage('customers', 'Customer deleted successfully!');
+          const res = await fetch(`/api/customers/${id}`, { method: "DELETE" });
+          if (!res.ok) throw new Error("Failed to delete customer");
+          showMessage("customers", "Customer deleted successfully!");
           loadCustomers();
         } catch (e) {
-          showMessage('customers', e.message, true);
+          showMessage("customers", e.message, true);
         }
       }
 
@@ -386,140 +431,162 @@
       async function loadSaleOptions() {
         try {
           const [customers, pets] = await Promise.all([
-            fetch('/api/customers').then(r => r.json()),
-            fetch('/api/pets').then(r => r.json())
+            fetch("/api/customers").then((r) => r.json()),
+            fetch("/api/pets").then((r) => r.json()),
           ]);
-          
-          document.getElementById('sale-customer').innerHTML = 
+
+          document.getElementById("sale-customer").innerHTML =
             '<option value="">Select Customer</option>' +
-            customers.map(c => `<option value="${c.id}">${c.fullName}</option>`).join('');
-          
-          document.getElementById('sale-pets').innerHTML = 
+            customers
+              .map((c) => `<option value="${c.id}">${c.fullName}</option>`)
+              .join("");
+
+          document.getElementById("sale-pets").innerHTML =
             '<option value="">Select Pets (Ctrl+Click for multiple)</option>' +
-            pets.filter(p => p.status === 'AVAILABLE').map(p => 
-              `<option value="${p.id}">${p.name} - ${p.species} ($${p.price})</option>`
-            ).join('');
+            pets
+              .filter((p) => p.status === "AVAILABLE")
+              .map(
+                (p) =>
+                  `<option value="${p.id}">${p.name} - ${p.species} ($${p.price})</option>`
+              )
+              .join("");
         } catch (e) {
-          showMessage('sales', 'Failed to load options', true);
+          showMessage("sales", "Failed to load options", true);
         }
       }
 
       async function loadSales() {
         try {
-          const res = await fetch('/api/sales');
-          if (!res.ok) throw new Error('Failed to load sales');
+          const res = await fetch("/api/sales");
+          if (!res.ok) throw new Error("Failed to load sales");
           const data = await res.json();
-          document.getElementById('sales-table').innerHTML = data.map(s => `
+          document.getElementById("sales-table").innerHTML = data
+            .map(
+              (s) => `
             <tr>
               <td>${s.id}</td>
-              <td>${s.customer?.fullName || 'N/A'}</td>
+              <td>${s.customer?.fullName || "N/A"}</td>
               <td>${s.items?.length || 0} item(s)</td>
               <td>$${s.totalPrice}</td>
               <td>${new Date(s.date).toLocaleDateString()}</td>
-              <td><button class="btn-delete" onclick="deleteSale(${s.id})">Delete</button></td>
+              <td><button class="btn-delete" onclick="deleteSale(${
+                s.id
+              })">Delete</button></td>
             </tr>
-          `).join('');
+          `
+            )
+            .join("");
         } catch (e) {
-          showMessage('sales', e.message, true);
+          showMessage("sales", e.message, true);
         }
       }
 
-      document.getElementById('sale-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const petSelect = document.getElementById('sale-pets');
-        const petIds = Array.from(petSelect.selectedOptions).map(o => parseInt(o.value));
-        
-        if (petIds.length === 0) {
-          showMessage('sales', 'Please select at least one pet', true);
-          return;
-        }
-        
-        const data = {
-          customerId: parseInt(formData.get('customerId')),
-          petIds: petIds
-        };
-        
-        try {
-          const res = await fetch('/api/sales', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-          });
-          if (!res.ok) {
-            const text = await res.text();
-            throw new Error(text || 'Failed to create sale');
+      document
+        .getElementById("sale-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+          const petSelect = document.getElementById("sale-pets");
+          const petIds = Array.from(petSelect.selectedOptions).map((o) =>
+            parseInt(o.value)
+          );
+
+          if (petIds.length === 0) {
+            showMessage("sales", "Please select at least one pet", true);
+            return;
           }
-          showMessage('sales', 'Sale created successfully!');
-          e.target.reset();
-          loadSales();
-          loadSaleOptions();
-        } catch (e) {
-          showMessage('sales', e.message, true);
-        }
-      });
+
+          const data = {
+            customerId: parseInt(formData.get("customerId")),
+            petIds: petIds,
+          };
+
+          try {
+            const res = await fetch("/api/sales", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data),
+            });
+            if (!res.ok) {
+              const text = await res.text();
+              throw new Error(text || "Failed to create sale");
+            }
+            showMessage("sales", "Sale created successfully!");
+            e.target.reset();
+            loadSales();
+            loadSaleOptions();
+          } catch (e) {
+            showMessage("sales", e.message, true);
+          }
+        });
 
       async function deleteSale(id) {
-        if (!confirm('Delete this sale?')) return;
+        if (!confirm("Delete this sale?")) return;
         try {
-          const res = await fetch(`/api/sales/${id}`, { method: 'DELETE' });
-          if (!res.ok) throw new Error('Failed to delete sale');
-          showMessage('sales', 'Sale deleted successfully!');
+          const res = await fetch(`/api/sales/${id}`, { method: "DELETE" });
+          if (!res.ok) throw new Error("Failed to delete sale");
+          showMessage("sales", "Sale deleted successfully!");
           loadSales();
         } catch (e) {
-          showMessage('sales', e.message, true);
+          showMessage("sales", e.message, true);
         }
       }
 
       // ========== USERS ==========
       async function loadUsers() {
         try {
-          const res = await fetch('/api/users');
-          if (!res.ok) throw new Error('Failed to load users');
+          const res = await fetch("/api/users");
+          if (!res.ok) throw new Error("Failed to load users");
           const data = await res.json();
-          document.getElementById('users-table').innerHTML = data.map(u => `
+          document.getElementById("users-table").innerHTML = data
+            .map(
+              (u) => `
             <tr>
               <td>${u.id}</td>
               <td>${u.email}</td>
               <td>${u.role}</td>
               <td><button class="btn-delete" onclick="deleteUser(${u.id})">Delete</button></td>
             </tr>
-          `).join('');
+          `
+            )
+            .join("");
         } catch (e) {
-          showMessage('users', e.message, true);
+          showMessage("users", e.message, true);
         }
       }
 
-      document.getElementById('user-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const data = Object.fromEntries(new FormData(e.target));
-        try {
-          const res = await fetch('/api/users', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-          });
-          if (!res.ok) {
-            const text = await res.text();
-            throw new Error(text || 'Failed to add user');
+      document
+        .getElementById("user-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const data = Object.fromEntries(new FormData(e.target));
+          try {
+            const res = await fetch("/api/users", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data),
+            });
+            if (!res.ok) {
+              const text = await res.text();
+              throw new Error(text || "Failed to add user");
+            }
+            showMessage("users", "User added successfully!");
+            e.target.reset();
+            loadUsers();
+          } catch (e) {
+            showMessage("users", e.message, true);
           }
-          showMessage('users', 'User added successfully!');
-          e.target.reset();
-          loadUsers();
-        } catch (e) {
-          showMessage('users', e.message, true);
-        }
-      });
+        });
 
       async function deleteUser(id) {
-        if (!confirm('Delete this user?')) return;
+        if (!confirm("Delete this user?")) return;
         try {
-          const res = await fetch(`/api/users/${id}`, { method: 'DELETE' });
-          if (!res.ok) throw new Error('Failed to delete user');
-          showMessage('users', 'User deleted successfully!');
+          const res = await fetch(`/api/users/${id}`, { method: "DELETE" });
+          if (!res.ok) throw new Error("Failed to delete user");
+          showMessage("users", "User deleted successfully!");
           loadUsers();
         } catch (e) {
-          showMessage('users', e.message, true);
+          showMessage("users", e.message, true);
         }
       }
 

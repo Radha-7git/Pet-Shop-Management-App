@@ -40,9 +40,18 @@ public class PetController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pet> get(@PathVariable Long id) {
+    public ResponseEntity<Pet> get(@PathVariable("id") Long id) {
         return petRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+        if (!petRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        petRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

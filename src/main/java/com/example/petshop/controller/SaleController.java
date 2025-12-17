@@ -32,7 +32,7 @@ public class SaleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Sale> getSaleById(@PathVariable Long id) {
+    public ResponseEntity<Sale> getSaleById(@PathVariable("id") Long id) {
         return saleRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -90,7 +90,7 @@ public class SaleController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSale(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteSale(@PathVariable("id") Long id) {
         if (!saleRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }

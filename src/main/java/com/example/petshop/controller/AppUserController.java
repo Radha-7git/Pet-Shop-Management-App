@@ -25,7 +25,7 @@ public class AppUserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AppUser> getUserById(@PathVariable Long id) {
+    public ResponseEntity<AppUser> getUserById(@PathVariable("id") Long id) {
         return userRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -59,7 +59,7 @@ public class AppUserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserRequest request) {
+    public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody UserRequest request) {
         return userRepository.findById(id)
                 .map(user -> {
                     if (request.getEmail() != null && !request.getEmail().equals(user.getEmail())) {
@@ -82,7 +82,7 @@ public class AppUserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
         if (!userRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }

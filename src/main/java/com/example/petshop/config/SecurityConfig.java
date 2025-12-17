@@ -14,16 +14,14 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // Allow static resources and the root welcome page
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers("/", "/index.html").permitAll()
-                // Allow public endpoints
                 .requestMatchers("/actuator/**", "/h2-console/**", "/api/**").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             )
-            .httpBasic(Customizer.withDefaults());
+            .httpBasic(basic -> basic.disable())
+            .formLogin(form -> form.disable());
 
-        // H2 console frames
         http.headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
         return http.build();
     }
