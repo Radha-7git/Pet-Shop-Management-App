@@ -1,5 +1,7 @@
 # Maven build outputs
 /target/
+frontend/node_modules/
+frontend/dist/
 
 # IDE/editor
 /.idea/
